@@ -1,3 +1,5 @@
+import java.net.ConnectException;
+
 public class ConnectionGene {
 
     private int inNode;
@@ -40,6 +42,7 @@ public class ConnectionGene {
     }
 
     public ConnectionGene copy() {
-        return new ConnectionGene(inNode, outNode, weight, expressed, innovation);
+        ConnectionGene copiedConnection = new ConnectionGene(inNode, outNode, weight, expressed, innovation);
+        return copiedConnection;
     }
 }

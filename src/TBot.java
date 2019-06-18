@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -20,8 +22,10 @@ public class TBot {
         testGenome.addConnectionGene(new ConnectionGene(2,5, 1, true, 4));
         testGenome.addConnectionGene(new ConnectionGene(5,4, 1, true, 5));
         testGenome.addConnectionGene(new ConnectionGene(1,5, 1, true, 8));
-        testGenome.toString();
         testGenome.addConnectionMutation(r);
         testGenome.toString();
+        System.out.println(testGenome.getConnectionGenes().get(12).getInNode());
+        System.out.println(testGenome.getConnectionGenes().get(12).getOutNode());
+
     }
 }

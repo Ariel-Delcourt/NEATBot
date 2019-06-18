@@ -39,8 +39,10 @@ public class Genome {
         inputs = new HashMap<Integer, NodeGene>();
         hiddens = new HashMap<Integer, NodeGene>();
         outputs = new HashMap<Integer, NodeGene>();
+        ArrayList possibleConnections;
 
-        ArrayList possibleConnections = new ArrayList<ArrayList>();
+        possibleConnections = new ArrayList<ConnectionGene>();
+        TBot.innovation++;
 
         //Separate the nodes by type, to prevent unsupported connections (eg. Output to Output node)
         for (NodeGene node : nodes.values()) {
@@ -59,20 +61,14 @@ public class Genome {
         for (NodeGene node : inputs.values()) {
 
             for (NodeGene hiddenNode : hiddens.values()) {
-                ArrayList currentConnections = new ArrayList<Integer>();
                 if (!isConnected(node.getId(), hiddenNode.getId(), connections)) {
-                    currentConnections.add(node.getId());
-                    currentConnections.add(hiddenNode.getId());
-                    possibleConnections.add(currentConnections.clone());
+                    possibleConnections.add(new ConnectionGene(node.getId(), hiddenNode.getId(), r.nextFloat(), true, TBot.innovation));
                 }
             }
 
             for (NodeGene outputNode : outputs.values()) {
-                ArrayList currentConnections = new ArrayList<Integer>();
                 if (!isConnected(node.getId(), outputNode.getId(), connections)) {
-                    currentConnections.add(node.getId());
-                    currentConnections.add(outputNode.getId());
-                    possibleConnections.add(currentConnections.clone());
+                    possibleConnections.add(new ConnectionGene(node.getId(), outputNode.getId(), r.nextFloat(), true, TBot.innovation));
                 }
             }
         }
@@ -80,23 +76,22 @@ public class Genome {
         //For every hidden node, check all possible connections to hidden and output nodes and add those to the possibilities
         for (NodeGene node : hiddens.values()) {
             for (NodeGene hiddenNode : hiddens.values()) {
-                ArrayList currentConnections = new ArrayList<Integer>();
-                if (!isConnected(node.getId(), hiddenNode.getId(), connections)) {
-                    currentConnections.add(node.getId());
-                    currentConnections.add(hiddenNode.getId());
-                    possibleConnections.add(currentConnections.clone());
+                if (!isConnected(node.getId(), hiddenNode.getId(), connections) && node.getId() != hiddenNode.getId()) {
+                    possibleConnections.add(new ConnectionGene(node.getId(), hiddenNode.getId(), r.nextFloat(), true, TBot.innovation));
                 }
             }
 
             for (NodeGene outputNode : outputs.values()) {
-                ArrayList currentConnections = new ArrayList<Integer>();
                 if (!isConnected(node.getId(), outputNode.getId(), connections)) {
-                    currentConnections.add(node.getId());
-                    currentConnections.add(outputNode.getId());
-                    possibleConnections.add(currentConnections.clone());
+                    possibleConnections.add(new ConnectionGene(node.getId(), outputNode.getId(), r.nextFloat(), true, TBot.innovation));
                 }
             }
         }
+        int choice = r.nextInt(possibleConnections.size());
+        ConnectionGene actualChoice = (ConnectionGene) possibleConnections.get(choice);
+        System.out.println(possibleConnections.get(choice));
+        connections.put(TBot.innovation, actualChoice);
+        return;
     }
 
     private boolean isConnected(int idNode1, int idNode2, Map<Integer, ConnectionGene> connectionList) {
